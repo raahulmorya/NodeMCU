@@ -6,7 +6,7 @@
 
 
 #define LED 2
-
+  String s;
 AsyncWebServer server(80);
 
 const char* ssid = "OPTIMUS";          // Your WiFi SSID
@@ -44,6 +44,7 @@ void setup() {
   WebSerial.begin(&server);
   WebSerial.msgCallback(recvMsg);
   server.begin();
+
 }
 
 void loop() {
@@ -51,10 +52,32 @@ void loop() {
   previous = me;
   Serial.println(me);
   delay(100);
-  while(strcmp(me.c_str(), previous.c_str()) == 0){
-//  Serial.println(me);
-  WebSerial.println(me);
-  WebSerial.println("Inside Loop");
-  delay(100);
+  while(me == previous){
+  s = getCommands();
+//  WebSerial.println(me);
+  
+  WebSerial.println(s);
+//  WebSerial.println("Inside Loop");
+  delay(1000);
+  }
+}
+
+
+String getCommands() {
+  if (Serial.available() > 0) {
+    String receivedString = ""; // Create a string variable to store received data
+    while (Serial.available() > 0) {
+      char incomingChar = Serial.read(); // Read a character
+      if (incomingChar == '\n' || incomingChar == '\r') {
+        // If newline or carriage return is encountered, break the loop
+        break;
+      }
+      receivedString += incomingChar; // Append the received character to the string
+    }
+    Serial.read(); 
+    return receivedString;
+  }
+  else {
+    return "SerialNotAvailable";
   }
 }

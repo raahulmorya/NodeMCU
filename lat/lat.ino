@@ -68,7 +68,9 @@ String getCommands() {
         break;
       }
       receivedString += incomingChar; // Append the received character to the string
+  
     }
+    Serial.read();
     return receivedString;
   }
   else {
@@ -120,7 +122,7 @@ void moveRobot() {
       bottomright();
     }
 
-    if (sobotDirection."== M") {
+    if (robotDirection == "M") {
       Serial.println("Moving BottomLeft");
       bottomleft();
     }
